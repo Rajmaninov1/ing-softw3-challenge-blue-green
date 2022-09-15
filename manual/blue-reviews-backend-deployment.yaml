@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-reviews-backend-deployment
+  labels:
+    app: blue-reviews-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blue-reviews-backend
+  template:
+    metadata:
+      labels:
+        app: blue-reviews-backend
+    spec:
+      containers:
+      - name: blue-reviews-backend
+        image: chaphe/backend-reviews-image:1.0
+        ports:
+        - containerPort: 300
+        env:
+        - name: MONGODB_HOST
+          value: mongo-reviews-service

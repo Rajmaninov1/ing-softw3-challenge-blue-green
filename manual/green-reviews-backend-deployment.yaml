@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green-reviews-backend-deployment
+  labels:
+    app: green-reviews-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: green-reviews-backend
+  template:
+    metadata:
+      labels:
+        app: green-reviews-backend
+    spec:
+      containers:
+      - name: green-reviews-backend
+        image: chaphe/backend-reviews-image:1.0
+        ports:
+        - containerPort: 300
+        env:
+        - name: MONGODB_HOST
+          value: mongo-reviews-service
+

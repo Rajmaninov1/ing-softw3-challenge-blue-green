@@ -1,0 +1,42 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews-backend-blue-green
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - reviews-backend-gateway
+  http:
+  - name: reviews-backend-test
+    match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(test=true)(;.*)?$"
+    route:
+    - destination:
+        host: reviews-backend
+        subset: $COLOR_TEST
+
+  - name: reviews-backend-default
+    route:
+    - destination:
+        host: reviews-backend
+        subset: $COLOR_ACTIVE
+
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews-backend-blue-green
+spec:
+  host: reviews-backend
+  subsets:
+  - name: blue
+    labels:
+      color: blue
+  - name: green
+    labels:
+      color: green
